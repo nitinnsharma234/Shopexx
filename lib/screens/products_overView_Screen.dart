@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shopexx/widgets/product_item.dart';
 
-import '../model/products.dart';
+import '../model/product.dart';
 import '../widgets/ProductsGrid.dart';
 
 class ProductOverviewScreen extends StatelessWidget {

@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:shopexx/widgets/product_item.dart';
 
 import '../Providers/products.dart';
-import '../model/products.dart';
+import '../model/product.dart';
 
 class ProductsGrid extends StatelessWidget {
   const ProductsGrid({
@@ -22,7 +22,8 @@ class ProductsGrid extends StatelessWidget {
           mainAxisSpacing: 10,
           childAspectRatio: 3 / 2),
       itemBuilder: (context, index) {
-        return ProductItem(loadedProducts[index].id, loadedProducts[index].title, loadedProducts[index].imageUrl);
+        return ChangeNotifierProvider(create: (BuildContext c) => loadedProducts[index],
+        child: const ProductItem());
       },
       itemCount: loadedProducts.length,
     );
