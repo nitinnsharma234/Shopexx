@@ -91,6 +91,14 @@ class Products with ChangeNotifier{
       print(response.statusCode);
     }).catchError((err){
       print(err);
+
+      print("Testting");
+      print("fjesafiuas");
+      print("fjesafiuas");
+      print("fjesafiuas");
+      print("fjesafiuas");
+      print("fjesafiuas");
+      print("fjesafiuas");
       _items.insert(existingProductIndex,prodct );
       notifyListeners();
       throw err;
