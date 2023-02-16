@@ -3,6 +3,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http ;
 import '../model/product.dart';
+import '../model/httpException.dart';
 
 class Products with ChangeNotifier{
   List<Product> _items= [
@@ -62,14 +63,38 @@ class Products with ChangeNotifier{
   Product findById(String id) {
     return _items.firstWhere((prod) => prod.id == id);
   }
-  void updateProduct(String productId, Product existingProduct )
+ Future<void> updateProduct(String productId, Product existingProduct ) async
   {
     int idx = _items.indexWhere((prod) => prod.id==productId);
-    _items[idx]=existingProduct;
-    notifyListeners();
+    if (idx>=0) {
+      await http.patch(Uri.parse("https://shopexx-49bc9-default-rtdb.firebaseio.com/products/$productId.json"),body:
+      json.encode({
+        "title": existingProduct.title,
+        "description": existingProduct.description,
+        "price": existingProduct.price,
+        "imageUrl": existingProduct.imageUrl
+      })
+      );
+      _items[idx] = existingProduct;
+      notifyListeners();
+    }
   }
   void removeProduct(String id){
+    final url =Uri.parse("https://www.google.com");
+    final existingProductIndex= _items.indexWhere((element) => element.id==id);
+    var prodct =_items[existingProductIndex];
     _items.removeWhere((prod) => prod.id==id);
+    http.delete(url).then((response){
+      if (response.statusCode>=400){
+       throw  HttpException("Cannot be deleted right now ");
+      }
+      print(response.statusCode);
+    }).catchError((err){
+      print(err);
+      _items.insert(existingProductIndex,prodct );
+      notifyListeners();
+      throw err;
+    });
     notifyListeners();
   }
 }

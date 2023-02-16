@@ -86,20 +86,13 @@ class _EditProductScreenState extends State<EditProductScreen> {
       _isLoading=true;
     });
     if(newProduct.id.isNotEmpty) {
-      Provider.of<Products>(context, listen: false).updateProduct(newProduct.id,newProduct);
-      setState(() {
-        _isLoading=false;
-      });
-      Navigator.of(context).pop();
+     await Provider.of<Products>(context, listen: false).updateProduct(newProduct.id,newProduct);
     }
     else{
       try{
         await Provider.of<Products>(context, listen: false).addProduct(newProduct);
-        print("Yes");
       }
       catch(err){
-        print("NOOOOOOO");
-        print(err);
         await  showDialog(context: context, builder: (ctx) {
           return AlertDialog(title: const Text("Something went wrong"),
             content: const Text("An error occured"),
@@ -108,10 +101,16 @@ class _EditProductScreenState extends State<EditProductScreen> {
             }, child: const Text("Ok"))],);
         });
       }
-      finally{
+   /*   finally{
         setState(() {
           _isLoading=false;
         });
+        Navigator.of(context).pop();
+      }*/
+      setState(() {
+        _isLoading=false;
+      });
+      if (context.mounted) {
         Navigator.of(context).pop();
       }
     }

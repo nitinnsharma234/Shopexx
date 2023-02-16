@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopexx/screens/cartScreens.dart';
 import 'package:shopexx/widgets/appDrawer.dart';
-import 'package:shopexx/widgets/badge.dart';
-
+import 'package:shopexx/widgets/badges.dart';
 import '../Providers/cart.dart';
 import '../Providers/products.dart';
-import '../model/product.dart';
 import '../widgets/ProductsGrid.dart';
 
 enum filterOptions{
@@ -47,7 +45,7 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
       appBar: AppBar(
         title: const Text('My Shop'),
         actions: [
-          Consumer<Cart>(builder:(_,cart,ch)=>Badge(value:cart.itemCount.toString() , child: ch!,),
+          Consumer<Cart>(builder:(_,cart,ch)=>Badges(value:cart.itemCount.toString() , child: ch!,),
           child:  IconButton(icon: const Icon(Icons.shopping_cart),onPressed: (){
             Navigator.of(context).pushNamed(CartScreen.routeName);
           },),),
