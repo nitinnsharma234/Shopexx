@@ -99,6 +99,9 @@ class Products with ChangeNotifier{
       print("fjesafiuas");
       print("fjesafiuas");
       print("fjesafiuas");
+
+
+      
       _items.insert(existingProductIndex,prodct );
       notifyListeners();
       throw err;
