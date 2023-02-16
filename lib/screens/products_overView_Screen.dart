@@ -5,6 +5,7 @@ import 'package:shopexx/widgets/appDrawer.dart';
 import 'package:shopexx/widgets/badge.dart';
 
 import '../Providers/cart.dart';
+import '../Providers/products.dart';
 import '../model/product.dart';
 import '../widgets/ProductsGrid.dart';
 
@@ -21,6 +22,25 @@ class ProductOverviewScreen extends StatefulWidget {
 
 class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
   var  _showOnlyFav =false;
+  var _isInit=true;
+  var _isLoading=false;
+  @override
+  void didChangeDependencies()
+  {
+    super.didChangeDependencies();
+    if(_isInit)
+      {
+        setState(() {
+          _isLoading=true;
+        });
+        Provider.of<Products>(context).fetchAndSetProducts().then((value) {
+          setState(() {
+            _isLoading=false;
+          });
+        });
+      }
+      _isInit=false;
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,7 +67,7 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
         ],
       ),
       drawer: const AppDrawer(),
-      body:  ProductsGrid(_showOnlyFav),
+      body: _isLoading?const Center(child: CircularProgressIndicator()): ProductsGrid(_showOnlyFav),
     );
   }
 }
