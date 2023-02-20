@@ -26,8 +26,21 @@ class UserProductItem extends StatelessWidget {
               Navigator.of(context).pushNamed(EditProductScreen.routeName,arguments:id );
             }, icon: const Icon(Icons.edit)),
             IconButton(
-                onPressed: () {
-                  Provider.of<Products>(context,listen: false).removeProduct(id);
+                onPressed: () async {
+                 try{
+                   await Provider.of<Products>(context,listen: false).removeProduct(id);
+                 }
+                 catch(error){
+                   if (context.mounted)
+                     {
+                          if(ScaffoldMessenger.of(context).mounted)
+                            {
+                              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content:Text("Item Deletion Failed ")));
+
+                            }
+                     }
+                 }
                 },
                 icon: Icon(
                   Icons.delete,

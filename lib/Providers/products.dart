@@ -1,6 +1,7 @@
  import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http ;
 import '../model/product.dart';
 import '../model/httpException.dart';
@@ -79,33 +80,17 @@ class Products with ChangeNotifier{
       notifyListeners();
     }
   }
-  void removeProduct(String id){
-    final url =Uri.parse("https://www.google.com");
+Future  <void> removeProduct(String id) async {
+    final url =Uri.parse("https://shopexx-49bc9-default-rtdb.firebaseio.com/products/$id.json");
     final existingProductIndex= _items.indexWhere((element) => element.id==id);
     var prodct =_items[existingProductIndex];
+    final response =await http.delete(url);
     _items.removeWhere((prod) => prod.id==id);
-    http.delete(url).then((response){
+    notifyListeners();
       if (response.statusCode>=400){
+      _items.insert(existingProductIndex,prodct);
        throw  HttpException("Cannot be deleted right now ");
       }
-      print(response.statusCode);
-    }).catchError((err){
-      print(err);
 
-      print("Testting");
-      print("fjesafiuas");
-      print("fjesafiuas");
-      print("fjesafiuas");
-      print("fjesafiuas");
-      print("fjesafiuas");
-      print("fjesafiuas");
-
-
-      
-      _items.insert(existingProductIndex,prodct );
-      notifyListeners();
-      throw err;
-    });
-    notifyListeners();
+    }
   }
-}
